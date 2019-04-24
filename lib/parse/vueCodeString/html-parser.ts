@@ -340,26 +340,28 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
         const l = match.attrs && match.attrs.length
         const attrs = new Array<Attr>(Number(l))
         // 取出属性
-        if (!l) return
-        for (let i = 0; i < l; i++) {
-            const args = match.attrs && match.attrs[i].array
-            if (!args) return
-            const value = args[3] || args[4] || args[5] || ''
-            let quotationMarks = ''
-            if(args[3]){
-                quotationMarks = '"'
-            } else if(args[4]){
-                quotationMarks = '\''
-            }
-            const shouldDecodeNewlines = true
-            if (match.attrs) {
-                attrs[i] = {
-                    code: args[0],
-                    name: args[1],
-                    start: match.attrs[i].start,
-                    end: match.attrs[i].end,
-                    value: decodeAttr(value, shouldDecodeNewlines),
-                    quotationMarks
+        if (l) {
+            for (let i = 0; i < l; i++) {
+                const args = match.attrs && match.attrs[i].array
+                if (args) {
+                    const value = args[3] || args[4] || args[5] || ''
+                    let quotationMarks = ''
+                    if(args[3]){
+                        quotationMarks = '"'
+                    } else if(args[4]){
+                        quotationMarks = '\''
+                    }
+                    const shouldDecodeNewlines = true
+                    if (match.attrs) {
+                        attrs[i] = {
+                            code: args[0],
+                            name: args[1],
+                            start: match.attrs[i].start,
+                            end: match.attrs[i].end,
+                            value: decodeAttr(value, shouldDecodeNewlines),
+                            quotationMarks
+                        }
+                    }
                 }
             }
         }

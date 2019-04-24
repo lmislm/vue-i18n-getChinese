@@ -227,10 +227,6 @@ export default {
                 }
             }
         })
-        console.log(extractStrings)
-        console.log('extractStrings')
-        console.log(markString)
-        console.log('markString')
         return {
             // 提取字符串后的
             result: jsCode,
