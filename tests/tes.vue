@@ -1,5 +1,6 @@
 <template>
-  <div class="tes">{{'模板测试！'}}
+  <div class="tes">
+    {{'模板测试！'}}
   </div>
 </template>
 

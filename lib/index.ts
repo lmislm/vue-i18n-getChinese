@@ -14,14 +14,16 @@ const autokeyPrefix = config.autokeyPrefix
 const findPath = config.findPath
 
 // 扫描文件目录，注意路径
-run(findPath ? findPath : path.join(__dirname))
+// run(findPath ? findPath : path.join(__dirname))
 /**
  * 
  * @param rootPath
  */
-function run(rootPath: string) {
+export function scan(rootPath: string) {
     glob(`${rootPath}/**/*.vue`, { ignore: exclude.map(pattern=>`${rootPath}/${pattern}`) }, (er, files) => {
         files.forEach((pathFilename, index) => {
+            console.log(`总共：${files.length}`)
+            console.log(`当前已经扫${index + 1}`)
             if (pathFilename.includes('node_modules')) return
             // 如果文件目录带了_，是测试用例
             if (pathFilename.indexOf('_') !== -1) return
