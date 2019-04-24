@@ -52,10 +52,10 @@ const conditionalComment = /^<!\[/
 
 // 忽略script，style，textarea里面的内容
 export const isPlainTextElement = makeMap('script,style,textarea', true)
-const reCache = {}
+const reCache: {[index: string]: any} = {}
 
 // html转义
-const decodingMap = {
+const decodingMap: {[index:string]: string} = {
     '&lt;': '<',
     '&gt;': '>',
     '&quot;': '"',
@@ -240,7 +240,7 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
         } else {
             // 上一级是script等标签，即表示vue文件中<script></script>包裹的内容
             let endTagLength = 0
-            const stackedTag = lastTag.toLowerCase() // script、style
+            const stackedTag: string = lastTag.toLowerCase() // script、style
             const reStackedTag = reCache[stackedTag] || (reCache[stackedTag] = new RegExp('([\\s\\S]*?)(</' + stackedTag + '[^>]*>)', 'i'))
             const rest = html.replace(reStackedTag, function (all, text, endTag) {
                 endTagLength = endTag.length
@@ -295,7 +295,7 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
                 start: index
             }
             advance(start[0].length)
-            let end, attr: RegExpMatchArray
+            let end: any, attr: RegExpMatchArray | null
             while (!(end = html.match(startTagClose)) && (attr = html.match(attribute))) {
                 let start = index
                 advance(attr[0].length)
@@ -338,7 +338,7 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
         const unary = isUnaryTag(tagName) || !!unarySlash
 
         const l = match.attrs && match.attrs.length
-        const attrs = new Array<Attr>(l)
+        const attrs = new Array<Attr>(Number(l))
         // 取出属性
         if (!l) return
         for (let i = 0; i < l; i++) {
@@ -370,7 +370,7 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
         }
 
         if (options.start) {
-            options.start(tagName, attrs, match.start, match.end)
+            options.start(tagName, attrs, Number(match.start), Number(match.end))
         }
     }
 
@@ -397,7 +397,6 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
             // If no tag name is provided, clean shop
             pos = 0
         }
-
         if (pos >= 0) {
             // Close all the open elements, up the stack
             for (let i = stack.length - 1; i >= pos; i--) {
@@ -409,17 +408,17 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
 
             // Remove the open elements from the stack
             stack.length = pos
-            lastTag = pos && stack[pos - 1].tag
+            lastTag = pos && stack[pos - 1].tag || undefined
         } else if (lowerCasedTagName === 'br') {
             if (options.start) {
-                options.start(tagName, [], start, end)
+                options.start(String(tagName), [], start, end)
             }
         } else if (lowerCasedTagName === 'p') {
             if (options.start) {
-                options.start(tagName, [], start, end)
+                options.start(String(tagName), [], start, end)
             }
             if (options.end) {
-                options.end(tagName, start, end)
+                options.end(String(tagName), start, end)
             }
         }
     }

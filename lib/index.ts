@@ -11,10 +11,8 @@ const exclude = config.exclude
 const autoZhKey = config.autoZhKey
 const keyFileName = config.keyFileName
 const autokeyPrefix = config.autokeyPrefix
-const findPath = config.findPath
 
 // 扫描文件目录，注意路径
-// run(findPath ? findPath : path.join(__dirname))
 /**
  * 
  * @param rootPath
@@ -63,7 +61,7 @@ export function scan(rootPath: string) {
                 return replaceCode
             }, replaceCode)
             //  替换页面元素相应的标记并输出json格式文案
-            let keyArr: never[] | string[][] = []
+            let keyArr: string[][] = []
             let html  = showReplaceCode
             // 生成的键值对JSON格式键名前缀
             let nameSpaceName = autokeyPrefix ? filename + '_' : ''
@@ -114,7 +112,7 @@ export function scan(rootPath: string) {
 }
 // 键名称
 function getKeyName(...str: string[]){
-    str = str.filter(str=>str).reduce((arr, name) => {
+    str = str.filter(str=>str).reduce((arr: string[], name: string) => {
         return [...arr, ...(name.trim().split(/\s+/g))]
     }, [])
     return str.slice(0, 3).map(name=>name.toLowerCase()).join('_')
