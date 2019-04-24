@@ -1,5 +1,5 @@
 {
-  "name": "vue-i18n-gettext",
+  "name": "vue-i18n-getChinese",
   "version": "0.0.1",
   "description": "scan .vue, export Chinese Text Json and set $t() by Chinese key",
   "main": "index.ts",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lmislm/vue-i18n-getText.git"
+    "url": "git+https://github.com/lmislm/vue-i18n-getChinese.git"
   },
   "keywords": [
     "vue-i18n",
@@ -20,9 +20,9 @@
   "author": "lmislm",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/lmislm/vue-i18n-getText/issues"
+    "url": "https://github.com/lmislm/vue-i18n-getChinese/issues"
   },
-  "homepage": "https://github.com/lmislm/vue-i18n-getText#readme",
+  "homepage": "https://github.com/lmislm/vue-i18n-getChinese#readme",
   "devDependencies": {
     "@babel/parser": "^7.4.3",
     "@babel/types": "^7.4.0",
