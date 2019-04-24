@@ -2,7 +2,11 @@
     "compilerOptions": {
       "baseUrl": ".",
       "paths": { "*": ["types/*"] },
-        "target": "es6",
-        "lib": ["dom"]
+      "target": "es6",
+      "lib": ["dom"],
+      "allowSyntheticDefaultImports": true
     },
+    "exclude": [
+      "node_modules"
+    ]
 }
