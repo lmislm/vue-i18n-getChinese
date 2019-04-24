@@ -13,7 +13,7 @@ const filterAttrNames = ['v-for']
 export type ExtractStringOptions = {
     startNo?: number,
     // 字符串过滤器
-    filter?: {(string): boolean}
+    filter?: {(arg0: string): boolean}
 }
 
 export default {
@@ -35,7 +35,6 @@ export default {
 
         // 顶级标签，对应vue的sfc文件的style、template、script、自定义标签等
         let topTagName: string
-
         parseHTML(jsCode, {
             start(tagName, attr, start, end){
                 if(level === 0){
@@ -61,7 +60,7 @@ export default {
                                 } else if("'" === item.quotationMarks){
                                     code = code.replace(/\\'/g, "'")
                                 }
-
+                                
                                 try{
 
                                     let result = jsCodeString.extractStringFromJS(code, {
@@ -69,7 +68,7 @@ export default {
                                         filter
                                     })
                                     if(result.extractString.length > 0) {
-                                        let _extractStrings = []
+                                        let _extractStrings: any = []
                                         result.extractString.forEach((_item, index) => {
                                             let extractString: ExtractString = {
                                                 ..._item, 
@@ -140,7 +139,7 @@ export default {
                                     })
     
                                     if(result.extractString.length > 0) {
-                                        let _extractStrings = []
+                                        let _extractStrings:any = []
                                         result.extractString.forEach((item, index) => {
                                             let extractString: ExtractString = {
                                                 ...item, 
@@ -200,7 +199,7 @@ export default {
                             filter
                         })
                         if(result.extractString.length > 0) {
-                            let _extractStrings = []
+                            let _extractStrings: any = []
                             result.extractString.forEach((item, index) => {
                                 let extractString: ExtractString = item
                                 _extractStrings.push(extractString)
@@ -218,16 +217,20 @@ export default {
                     
                 }
             },
+            
             end(tagName){
                 if(level === 1 && topTagName == tagName){
-                    topTagName = undefined
+                    topTagName = String(undefined)
                     level--
                 } else if(level > 1 && 'template' === tagName && 'template' === topTagName){
                     level--
                 }
             }
         })
-
+        console.log(extractStrings)
+        console.log('extractStrings')
+        console.log(markString)
+        console.log('markString')
         return {
             // 提取字符串后的
             result: jsCode,

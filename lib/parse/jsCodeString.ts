@@ -75,7 +75,7 @@ function extractStringFromJSCode(code: string, filter: {(str: string): boolean})
     stringList.forEach((ast, index)=>{
         if(Array.isArray(ast)){
             // 是数组表示是带插值的模板字符串，特殊对待，将其封装为自定义的SortTemplateQuasisASTItem对象
-            let value = ast.reduce((value, item, index)=>{
+            let value = ast.reduce((value, item:any, index)=>{
                 // 将多个模板字符串用插入赋表示，如果`test${'xxx'},${'yyy'}`改为'test{0},{1}'，这样xxx和yyy可以插入到对应的{}中
                 if(index < ast.length - 1){
                     return value + item.value.raw + `{${index}}`
@@ -104,7 +104,7 @@ function extractStringFromJSCode(code: string, filter: {(str: string): boolean})
         }
     })
 
-    sortASTList.sort((item1, item2)=>item1.item.start - item2.item.start)
+    sortASTList.sort((item1:any, item2:any)=>item1.item.start - item2.item.start)
     return sortASTList
 }
 
@@ -130,12 +130,14 @@ function extractStringFromBabelAST(ast: any, stringList: StringASTType[], filter
         // 对于模板字符串要特殊处理，如果起包含插值（expressions），每个插值在分别遍历
         if(ast.expressions && ast.expressions.length && ast.quasis.length > 1){
             if(ast.quasis.some((_ast: TemplateLiteral)=>{
-                return filter(_ast.value.cooked)
+                if (_ast.value) {
+                    return filter(_ast.value.cooked)
+                }
             })){
                 stringList.push(ast.quasis)
-                ast.expressions.forEach(item=> extractStringFromBabelAST(item, stringList, filter))
+                ast.expressions.forEach((item:any)=> extractStringFromBabelAST(item, stringList, filter))
             } else {
-                ast.expressions.forEach(item=> extractStringFromBabelAST(item, stringList, filter))
+                ast.expressions.forEach((item:any)=> extractStringFromBabelAST(item, stringList, filter))
             }
         } else {
             let _ast: TemplateLiteral = ast
@@ -165,7 +167,7 @@ export type ExtractStringOptions = {
     // 从多少开始计数
     startNo?: number,
     // 字符串过滤器
-    filter?: {(string): boolean}
+    filter?: {(arg0: string): boolean}
 }
 
 export default {
@@ -192,7 +194,7 @@ export default {
             extractString: ExtractString
         }} = {}
 
-        stringASTList.forEach(item=>{
+        stringASTList.forEach((item:any)=>{
             if(item.type == 'String'){
                 // 普通字符串和没有插值的模板字符串用-||index||-，占位
 

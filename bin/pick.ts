@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import * as program from 'commander'
 import {scan} from '../lib/index'
-const path = program.parseArgs[0] || '.'
+const path = (<any>program.parseArgs)[0] || '.'
 
 program
   .version('0.0.1')

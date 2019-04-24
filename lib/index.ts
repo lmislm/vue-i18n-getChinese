@@ -11,10 +11,8 @@ const exclude = config.exclude
 const autoZhKey = config.autoZhKey
 const keyFileName = config.keyFileName
 const autokeyPrefix = config.autokeyPrefix
-const findPath = config.findPath
 
 // 扫描文件目录，注意路径
-// run(findPath ? findPath : path.join(__dirname))
 /**
  * 
  * @param rootPath
@@ -22,14 +20,12 @@ const findPath = config.findPath
 export function scan(rootPath: string) {
     glob(`${rootPath}/**/*.vue`, { ignore: exclude.map(pattern=>`${rootPath}/${pattern}`) }, (er, files) => {
         files.forEach((pathFilename, index) => {
-            console.log(`总共：${files.length}`)
-            console.log(`当前已经扫${index + 1}`)
             if (pathFilename.includes('node_modules')) return
             // 如果文件目录带了_，是测试用例
             if (pathFilename.indexOf('_') !== -1) return
             // 文件名字，用于后面构造json里的名称
             let filename = path.parse(pathFilename).name.toLowerCase()
-            function hit(code){
+            function hit(code: any){
               return /[\u4e00-\u9fa5]/.test(code)
             }
             let data = fs.readFileSync(pathFilename, 'utf-8')
@@ -65,7 +61,7 @@ export function scan(rootPath: string) {
                 return replaceCode
             }, replaceCode)
             //  替换页面元素相应的标记并输出json格式文案
-            let keyArr = []
+            let keyArr: string[][] = []
             let html  = showReplaceCode
             // 生成的键值对JSON格式键名前缀
             let nameSpaceName = autokeyPrefix ? filename + '_' : ''
@@ -115,14 +111,14 @@ export function scan(rootPath: string) {
     });
 }
 // 键名称
-function getKeyName(...str){
-    str = str.filter(str=>str).reduce((arr, name)=>{
+function getKeyName(...str: string[]){
+    str = str.filter(str=>str).reduce((arr: string[], name: string) => {
         return [...arr, ...(name.trim().split(/\s+/g))]
     }, [])
     return str.slice(0, 3).map(name=>name.toLowerCase()).join('_')
 }
 // json格式
-function getJsonFormat (keys, index, length, pathFilename) {
+function getJsonFormat (keys: any, index: number, length: number, pathFilename: string) {
     let startBrace
     let endBrace
     if (index !== 0) {

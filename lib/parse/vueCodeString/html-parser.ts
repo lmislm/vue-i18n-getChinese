@@ -52,10 +52,10 @@ const conditionalComment = /^<!\[/
 
 // 忽略script，style，textarea里面的内容
 export const isPlainTextElement = makeMap('script,style,textarea', true)
-const reCache = {}
+const reCache: {[index: string]: any} = {}
 
 // html转义
-const decodingMap = {
+const decodingMap: {[index:string]: string} = {
     '&lt;': '<',
     '&gt;': '>',
     '&quot;': '"',
@@ -70,7 +70,7 @@ const encodedAttrWithNewLines = /&(?:lt|gt|quot|amp|#10|#9);/g
 
 // #5992
 const isIgnoreNewlineTag = makeMap('pre,textarea', true)
-const shouldIgnoreFirstNewline = (tag, html) => tag && isIgnoreNewlineTag(tag) && html[0] === '\n'
+const shouldIgnoreFirstNewline = (tag: string, html: string | string[]) => tag && isIgnoreNewlineTag(tag) && html[0] === '\n'
 
 type Attr = {
     name: string, 
@@ -89,9 +89,9 @@ type Attr = {
  * @param {any} shouldDecodeNewlines    是否支持换行的转码
  * @returns 
  */
-function decodeAttr (value, shouldDecodeNewlines) {
+function decodeAttr (value: string, shouldDecodeNewlines: boolean) {
     const re = shouldDecodeNewlines ? encodedAttrWithNewLines : encodedAttr
-    return value.replace(re, match => decodingMap[match])
+    return value.replace(re, (match: string | number) => decodingMap[match])
 }
 
 type ParseHTMLOptions = {
@@ -133,7 +133,7 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
     // 用于循环的元素
     let last, 
     // 找到的标签
-    lastTag
+    lastTag: string | undefined
 
     // 循环递归获取html
     while (html) {
@@ -240,7 +240,7 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
         } else {
             // 上一级是script等标签，即表示vue文件中<script></script>包裹的内容
             let endTagLength = 0
-            const stackedTag = lastTag.toLowerCase() // script、style
+            const stackedTag: string = lastTag.toLowerCase() // script、style
             const reStackedTag = reCache[stackedTag] || (reCache[stackedTag] = new RegExp('([\\s\\S]*?)(</' + stackedTag + '[^>]*>)', 'i'))
             const rest = html.replace(reStackedTag, function (all, text, endTag) {
                 endTagLength = endTag.length
@@ -275,7 +275,7 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
     parseEndTag()
 
     // 向后html截取n个字符
-    function advance (n) {
+    function advance (n: number) {
         index += n
         html = html.substring(n)
     }
@@ -295,7 +295,7 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
                 start: index
             }
             advance(start[0].length)
-            let end, attr: RegExpMatchArray
+            let end: any, attr: RegExpMatchArray | null
             while (!(end = html.match(startTagClose)) && (attr = html.match(attribute))) {
                 let start = index
                 advance(attr[0].length)
@@ -337,11 +337,13 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
 
         const unary = isUnaryTag(tagName) || !!unarySlash
 
-        const l = match.attrs.length
-        const attrs = new Array<Attr>(l)
+        const l = match.attrs && match.attrs.length
+        const attrs = new Array<Attr>(Number(l))
         // 取出属性
+        if (!l) return
         for (let i = 0; i < l; i++) {
-            const args = match.attrs[i].array
+            const args = match.attrs && match.attrs[i].array
+            if (!args) return
             const value = args[3] || args[4] || args[5] || ''
             let quotationMarks = ''
             if(args[3]){
@@ -350,13 +352,15 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
                 quotationMarks = '\''
             }
             const shouldDecodeNewlines = true
-            attrs[i] = {
-                code: args[0],
-                name: args[1],
-                start: match.attrs[i].start,
-                end: match.attrs[i].end,
-                value: decodeAttr(value, shouldDecodeNewlines),
-                quotationMarks
+            if (match.attrs) {
+                attrs[i] = {
+                    code: args[0],
+                    name: args[1],
+                    start: match.attrs[i].start,
+                    end: match.attrs[i].end,
+                    value: decodeAttr(value, shouldDecodeNewlines),
+                    quotationMarks
+                }
             }
         }
 
@@ -366,7 +370,7 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
         }
 
         if (options.start) {
-            options.start(tagName, attrs, match.start, match.end)
+            options.start(tagName, attrs, Number(match.start), Number(match.end))
         }
     }
 
@@ -393,7 +397,6 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
             // If no tag name is provided, clean shop
             pos = 0
         }
-
         if (pos >= 0) {
             // Close all the open elements, up the stack
             for (let i = stack.length - 1; i >= pos; i--) {
@@ -405,17 +408,17 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
 
             // Remove the open elements from the stack
             stack.length = pos
-            lastTag = pos && stack[pos - 1].tag
+            lastTag = pos && stack[pos - 1].tag || undefined
         } else if (lowerCasedTagName === 'br') {
             if (options.start) {
-                options.start(tagName, [], start, end)
+                options.start(String(tagName), [], start, end)
             }
         } else if (lowerCasedTagName === 'p') {
             if (options.start) {
-                options.start(tagName, [], start, end)
+                options.start(String(tagName), [], start, end)
             }
             if (options.end) {
-                options.end(tagName, start, end)
+                options.end(String(tagName), start, end)
             }
         }
     }
