@@ -13,7 +13,7 @@ const filterAttrNames = ['v-for']
 export type ExtractStringOptions = {
     startNo?: number,
     // 字符串过滤器
-    filter?: {(string): boolean}
+    filter?: {(arg0: string): boolean}
 }
 
 export default {
@@ -69,7 +69,7 @@ export default {
                                         filter
                                     })
                                     if(result.extractString.length > 0) {
-                                        let _extractStrings = []
+                                        let _extractStrings: any = []
                                         result.extractString.forEach((_item, index) => {
                                             let extractString: ExtractString = {
                                                 ..._item, 
@@ -140,7 +140,7 @@ export default {
                                     })
     
                                     if(result.extractString.length > 0) {
-                                        let _extractStrings = []
+                                        let _extractStrings:any = []
                                         result.extractString.forEach((item, index) => {
                                             let extractString: ExtractString = {
                                                 ...item, 
@@ -200,7 +200,7 @@ export default {
                             filter
                         })
                         if(result.extractString.length > 0) {
-                            let _extractStrings = []
+                            let _extractStrings: any = []
                             result.extractString.forEach((item, index) => {
                                 let extractString: ExtractString = item
                                 _extractStrings.push(extractString)

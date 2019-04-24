@@ -1,12 +1,15 @@
 {
-  "name": "vue-i18n-getChinese",
+  "name": "vue-i18n-chinese-extractor",
   "version": "0.0.1",
   "description": "scan .vue, export Chinese Text Json and set $t() by Chinese key",
-  "main": "index.ts",
+  "main": "./lib/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "ts-node -p ./src",
-    "start": "npm run build -- -w"
+    "build": "tsc",
+    "start": "npm run build",
+    "prepare" : "npm run build",
+    "version" : "git add -A .",
+    "postversion" : "git push && git push --tags"
   },
   "repository": {
     "type": "git",

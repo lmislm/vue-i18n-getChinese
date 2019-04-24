@@ -70,7 +70,7 @@ const encodedAttrWithNewLines = /&(?:lt|gt|quot|amp|#10|#9);/g
 
 // #5992
 const isIgnoreNewlineTag = makeMap('pre,textarea', true)
-const shouldIgnoreFirstNewline = (tag, html) => tag && isIgnoreNewlineTag(tag) && html[0] === '\n'
+const shouldIgnoreFirstNewline = (tag: string, html: string | string[]) => tag && isIgnoreNewlineTag(tag) && html[0] === '\n'
 
 type Attr = {
     name: string, 
@@ -89,9 +89,9 @@ type Attr = {
  * @param {any} shouldDecodeNewlines    是否支持换行的转码
  * @returns 
  */
-function decodeAttr (value, shouldDecodeNewlines) {
+function decodeAttr (value: string, shouldDecodeNewlines: boolean) {
     const re = shouldDecodeNewlines ? encodedAttrWithNewLines : encodedAttr
-    return value.replace(re, match => decodingMap[match])
+    return value.replace(re, (match: string | number) => decodingMap[match])
 }
 
 type ParseHTMLOptions = {
@@ -133,7 +133,7 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
     // 用于循环的元素
     let last, 
     // 找到的标签
-    lastTag
+    lastTag: string | undefined
 
     // 循环递归获取html
     while (html) {
@@ -275,7 +275,7 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
     parseEndTag()
 
     // 向后html截取n个字符
-    function advance (n) {
+    function advance (n: number) {
         index += n
         html = html.substring(n)
     }
@@ -337,11 +337,13 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
 
         const unary = isUnaryTag(tagName) || !!unarySlash
 
-        const l = match.attrs.length
+        const l = match.attrs && match.attrs.length
         const attrs = new Array<Attr>(l)
         // 取出属性
+        if (!l) return
         for (let i = 0; i < l; i++) {
-            const args = match.attrs[i].array
+            const args = match.attrs && match.attrs[i].array
+            if (!args) return
             const value = args[3] || args[4] || args[5] || ''
             let quotationMarks = ''
             if(args[3]){
@@ -350,13 +352,15 @@ export function parseHTML (html: string, options: ParseHTMLOptions) {
                 quotationMarks = '\''
             }
             const shouldDecodeNewlines = true
-            attrs[i] = {
-                code: args[0],
-                name: args[1],
-                start: match.attrs[i].start,
-                end: match.attrs[i].end,
-                value: decodeAttr(value, shouldDecodeNewlines),
-                quotationMarks
+            if (match.attrs) {
+                attrs[i] = {
+                    code: args[0],
+                    name: args[1],
+                    start: match.attrs[i].start,
+                    end: match.attrs[i].end,
+                    value: decodeAttr(value, shouldDecodeNewlines),
+                    quotationMarks
+                }
             }
         }
 
