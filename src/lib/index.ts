@@ -113,10 +113,14 @@ export function scan(rootPath: string) {
           return;
         }
       });
-      // 判断内容为空则不追加空内容
+      // 判断内容为空则不追加空内容，生成多文件还是单文件
       if (keyMap) {
         const formatterKeyMap = JSON.parse(JSON.stringify(getJsonFormat(keyMap, index, files.length, pathFilename)));
-        fs.appendFileSync(`${targetDir}/${keyFileName}.json`, `${formatterKeyMap}`);
+        if (pathFilename) {
+          let regFileName = pathFilename.match('[^/]+(?!.*/)')
+          let vueFileName = keyFileName ? keyFileName : regFileName && regFileName[0]
+          fs.appendFileSync(`${targetDir}/${vueFileName}.json`, `${formatterKeyMap}`);
+        }
       }
     });
   });
