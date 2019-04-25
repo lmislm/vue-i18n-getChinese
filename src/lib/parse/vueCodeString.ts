@@ -86,8 +86,9 @@ export default {
                 }
               } else if (item.name.match(/^[a-zA-Z_]+/g) && filter(item.value)) {
                 // 如果是用普通变量名开头，表示是非绑定字段，使用“:”重新绑定
-
-                let quotationMarks = item.quotationMarks == '"' ? "'" : '"';
+                // 绑定的变量应该用双引号包裹
+                // let quotationMarks = item.quotationMarks == '"' ? "'" : '"';
+                let quotationMarks = item.quotationMarks;
                 let replaceCode = `${markString[0]}${extractStrings.length}${markString[1]}`;
                 let extractString: ExtractString = {
                   index: extractStrings.length,
