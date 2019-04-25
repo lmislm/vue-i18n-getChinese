@@ -1,4 +1,4 @@
-import { parseHTML } from './vueCodeString/html-parser';
+import { parseHTML } from './html-parser';
 import { markString, interpolationMark, ExtractStringResult, ExtractString } from './common';
 import jsCodeString from './jsCodeString';
 

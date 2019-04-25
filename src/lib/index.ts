@@ -47,7 +47,7 @@ export function scan(rootPath: string) {
         return '';
       }
       // 没有替换$t()变量
-      let showReplaceCode = findWordArr.reduce((replaceCode, findWord, index) => {
+      let showReplaceCode = findWordArr.reduce((replaceCode: any, findWord: any, index: number) => {
         if (!findWord.used) {
           if (replaceCode.indexOf(`${markString[0]}${findWord.index}${interpolationMark[0]}`) > -1) {
             let start = replaceCode.indexOf(`${markString[0]}${findWord.index}${interpolationMark[0]}`);
@@ -68,7 +68,7 @@ export function scan(rootPath: string) {
       const html = showReplaceCode;
       // 生成的键值对JSON格式键名前缀
       const nameSpaceName = autokeyPrefix ? filename + '_' : '';
-      const resultHtml = findWordArr.reduce((replaceCode: any, word, index) => {
+      const resultHtml = findWordArr.reduce((replaceCode: any, word: any, index: number) => {
         // 构造新的解析页面
         if (!word.used) {
           if (replaceCode.indexOf(`${markString[0]}${word.index}${interpolationMark[0]}`) > -1) {
@@ -81,7 +81,7 @@ export function scan(rootPath: string) {
             return replaceCode.replace(markString[0] + word.index + markString[1], word.originalCode);
           }
         } else {
-          let key = getKeyName(nameSpaceName || '', word.key);
+          let key = getKeyName(nameSpaceName || '', String(word.key));
           keyArr.push([key, word.word]);
           let quotationMarks = "'";
           let t = '$t';
@@ -97,14 +97,16 @@ export function scan(rootPath: string) {
               `${markString[0]}${index}${interpolationMark[0]}`,
               `${t}(${quotationMarks}${word.key}${quotationMarks}, [`,
             )
-            .replace(`${interpolationMark[1]}${index}${interpolationMark[0]}`, ``)
-            .replace(`${interpolationMark[1]}${index}${markString[1]}`, ``);
+            .replace(`${interpolationMark[1]}${index}${interpolationMark[0]}`, `,`)
+            .replace(`${interpolationMark[1]}${index}${markString[1]}`, `])`)
         }
       }, html);
       // 构造键值对
       // 同步写入文件
       fs.writeFileSync(pathFilename, resultHtml);
-      const keyMap = keyArr.map(([key, value]) => `"${key}": "${value.replace(/[\n]/g, '')}"`).join(',\n');
+      // 去重
+      const uniqueFindWordArr: any = uniqueArray(keyArr)
+      const keyMap: any = uniqueFindWordArr.map(([key, value]: [any, any]) => `"${key}": "${value.replace(/[\n]/g, '')}"`).join(',\n');
       // rimraf.sync(targetDir);
       fs.mkdir(targetDir, function(err) {
         if (err) {
@@ -122,6 +124,14 @@ export function scan(rootPath: string) {
 // 过滤中文
 function hit(code: any) {
   return /[\u4e00-\u9fa5]/.test(code);
+}
+// 同文件中去重,固定值过滤
+function uniqueArray(...arr: Array<Object>) {
+  const res = new Map();
+  let arrValues: any = arr[0]
+  return arrValues.filter((a: any) => {
+    return !res.has(a[0]) && res.set(a[0], 1)
+  })
 }
 // 键名称
 function getKeyName(...str: string[]) {
