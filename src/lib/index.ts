@@ -115,7 +115,7 @@ export function scan(rootPath: string) {
       });
       // 判断内容为空则不追加空内容，生成多文件还是单文件
       if (keyMap) {
-        const formatterKeyMap = JSON.parse(JSON.stringify(getJsonFormat(keyMap, index, files.length, pathFilename)));
+        const formatterKeyMap = JSON.parse(JSON.stringify(getJsonFormat(keyMap, index, files.length, pathFilename, keyFileName)));
         if (pathFilename) {
           let regFileName = pathFilename.match('[^/]+(?!.*/)')
           let vueFileName = keyFileName ? keyFileName : regFileName && regFileName[0]
@@ -150,18 +150,24 @@ function getKeyName(...str: string[]) {
     .join('_');
 }
 // json格式
-function getJsonFormat(keys: any, index: number, length: number, pathFilename: string) {
-  let startBrace;
-  let endBrace;
-  if (index !== 0) {
-    startBrace = `"${pathFilename}": {\r\n`;
+function getJsonFormat(keys: any, index: number, length: number, pathFilename: string, keyFileName: string) {
+  if (keyFileName) {
+    // 指定的生成单文件
+    let startBrace;
+    let endBrace;
+    if (index !== 0) {
+      startBrace = `"${pathFilename}": {\r\n`;
+    } else {
+      startBrace = `[{\r\n"${pathFilename}": {\r\n`;
+    }
+    if (index !== length - 1) {
+      endBrace = `},\r\n`;
+    } else {
+      endBrace = `}\r\n}]`;
+    }
+    return `${startBrace}\r\n${keys}\r\n${endBrace}\r\n`;
   } else {
-    startBrace = `[{\r\n"${pathFilename}": {\r\n`;
+    // 生成多个文件
+    return `[{\r\n${keys}\r\n}]\r\n`;
   }
-  if (index !== length - 1) {
-    endBrace = `},\r\n`;
-  } else {
-    endBrace = `}\r\n}]`;
-  }
-  return `${startBrace}\r\n${keys}\r\n${endBrace}\r\n`;
 }
