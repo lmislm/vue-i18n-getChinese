@@ -1,6 +1,6 @@
 {
   "name": "vue-i18n-chinese-extractor",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "scan .vue, export Chinese Text Json and set $t() by Chinese key",
   "main": "./src/lib/index.ts",
   "scripts": {
