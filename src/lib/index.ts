@@ -97,7 +97,7 @@ export function scan(rootPath: string) {
               `${markString[0]}${index}${interpolationMark[0]}`,
               `${t}(${quotationMarks}${word.key}${quotationMarks}, [`,
             )
-            .replace(`${interpolationMark[1]}${index}${interpolationMark[0]}`, `,`)
+            .replace(`${interpolationMark[1]}${index}${interpolationMark[0]}`, `, `)
             .replace(`${interpolationMark[1]}${index}${markString[1]}`, `])`)
         }
       }, html);
