@@ -7,6 +7,20 @@ ts-node ./src/bin/index.ts tests/
 - [ ] 两个文件的JSON被合并到一个文件中，导致一个文件有两个`[{}]`、`[{}]`。
 - [ ] 多变量替换时，出现乱码，如：`let content = $\{this.packageName\[discount\]\}，文档导出${discount * 10}折，${formatTime}到期`,被替换为`let content = this.$t('{0}，文档导出{1}折，{2}到期', [this.packageName[discount],discount * 10$$%33%$$formatTime])`，应该为：`let content = this.$t('{0}，文档导出{1}折，{2}到期', [this.packageName[discount],discount * 10,formatTime])`
 - [ ] 变量间隔替换问题，如：`<div v-if="discount < 1">文档优惠({{discount * 10}}折)：-{{(totalPrice - discountPrice) | priceFormat}}</div>`，被替换为`<div v-if="discount < 1">{{$t('文档优惠(')}}{{$t('折)：-')}}scount * 10}}折)：-{{(totalPrice - discountPrice) | priceFormat}}</div>`
+- [ ] `jsx`语法不支持,如：
+```javascript
+renderTimeHeader (h, { column, $index }) {
+  // element 2.4.2不支持slot header
+  return (
+    <div class="timeTableHeader" style="line-height:30px!important;">
+      <span>开始日期</span>
+      <br/>
+      <span>结束日期</span>
+    </div>
+  )
+}
+```
 ## ToDo
 - [ ] 出现国际化特征文案如`$t() `字符的不再次进行替换成`$t($t())`
 - [ ] 选出迭代更新的文件
+- [ ] key值转为小写填充到vue文件中
