@@ -2,7 +2,8 @@
 <template>
   <div class="test">
     <!-- 测试模板内注释 -->
-    {{'这里也是测试文件2！'}}
+    {{'测试2'}}
+    {{'测试2'}}
   </div>
 </template>
 
@@ -20,6 +21,7 @@ export default {
   methods: {
     // 测试注释method
     test2 () {
+      this.$noti('这里是method里面的测试')
       console.log('这里是测试console')
     }
   },

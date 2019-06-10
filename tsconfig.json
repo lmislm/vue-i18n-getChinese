@@ -1,12 +1,14 @@
 {
     "compilerOptions": {
       "baseUrl": ".",
-      "paths": { "*": ["types/*"] },
+      "paths": { "*": ["src/types/*"] },
       "target": "es6",
       "lib": ["dom"],
+      "module": "commonjs",
+      "outDir": "./dist",
+      "declaration": true,
+      "strict": true,
       "allowSyntheticDefaultImports": true
     },
-    "exclude": [
-      "node_modules"
-    ]
+    "exclude": ["node_modules", "**/__tests__/*"]
 }
