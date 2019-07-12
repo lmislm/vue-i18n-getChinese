@@ -3,9 +3,6 @@
 
 **用法：** 可以拷贝本项目文件中到指定项目中，然后`运行`。
 
-页面版和此项目核心源（修复了部分bug，有空再从该项目fork下来改）：https://github.com/laden666666/vue-i18n-tools
-
-
 scan .vue, export Chinese Text Json and set $t() by Chinese key
 
 提取vue文件中的中文字符到一个指定的json文件格式中，并将原有的字符串加上vue-i18n的$t()或者this.$t()规则。
@@ -38,3 +35,8 @@ renderTimeHeader (h, { column, $index }) {
 - [ ] 出现国际化特征文案如`$t() `字符的不再次进行替换成`$t($t())`
 - [ ] 选出迭代更新的文件
 - [ ] key值转为小写填充到vue文件中
+
+# 贡献
+项目核心代码来自：https://github.com/laden666666/vue-i18n-tools
+本项目只是修复部分bug，并进行了多文件提取中文字符串和回填字符串的脚本化，当初并没有考虑到fork，等到想fork再改的时候已经晚了，特此说明。
+更多内容还请关注：https://github.com/laden666666/
