@@ -1,8 +1,8 @@
 # 说明
+项目处于`dev状态`，没有完善一键运行脚本，可以提供简单的脚本思路。
+**用法：**可以拷贝本项目文件中到指定项目中，然后`运行`。
 
-项目处于dev状态，没有完善一键运行脚本。
-
-页面版和此项目核心源：https://github.com/laden666666/vue-i18n-tools
+页面版和此项目核心源（修复了部分bug，有空再从该项目fork下来改）：https://github.com/laden666666/vue-i18n-tools
 
 
 scan .vue, export Chinese Text Json and set $t() by Chinese key
