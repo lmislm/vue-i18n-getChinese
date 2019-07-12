@@ -1,6 +1,14 @@
 # 说明
+
+项目处于dev状态，没有完善一键运行脚本。
+
+页面版和此项目核心源：https://github.com/laden666666/vue-i18n-tools
+
+
 scan .vue, export Chinese Text Json and set $t() by Chinese key
+
 提取vue文件中的中文字符到一个指定的json文件格式中，并将原有的字符串加上vue-i18n的$t()或者this.$t()规则。
+
 以中文字符作为key。
 ## 运行
 ts-node ./src/bin/index.ts tests/
@@ -25,6 +33,7 @@ renderTimeHeader (h, { column, $index }) {
 }
 ```
 ## ToDo
+- [ ] 一键脚本
 - [ ] 出现国际化特征文案如`$t() `字符的不再次进行替换成`$t($t())`
 - [ ] 选出迭代更新的文件
 - [ ] key值转为小写填充到vue文件中
