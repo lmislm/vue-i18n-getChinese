@@ -37,6 +37,8 @@ renderTimeHeader (h, { column, $index }) {
 - [ ] key值转为小写填充到vue文件中
 
 # 贡献
-项目核心代码来自：https://github.com/laden666666/vue-i18n-tools
-本项目只是修复部分bug，并进行了多文件提取中文字符串和回填字符串的脚本化，当初并没有考虑到fork，等到想fork再改的时候已经晚了，特此说明。
-更多内容还请关注：https://github.com/laden666666/
+项目核心代码来自：**https://github.com/laden666666/vue-i18n-tools**
+
+本项目只是`修复部分bug`，并进行了多文件提取中文字符串和回填字符串的`脚本化`，当初并没有考虑到fork，等到想fork再改的时候已经晚了，特此说明。
+
+更多内容还**请关注：** https://github.com/laden666666/
